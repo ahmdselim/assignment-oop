@@ -122,7 +122,8 @@ class DB implements DB_RUlES
 
     public function pagination($page, $per_page)
     {
-        $start = $per_page * $page - $per_page;
+        // $start = $per_page * $page - $per_page;
+        $start = ($page - 1) * $per_page;
         $this->query .= " LIMIT $start,$per_page";
         return $this;
     }

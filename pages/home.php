@@ -6,9 +6,10 @@ $db = new App\DB;
 $row = $db->table("products")->select(["*"])->execute();
 $rows_num = mysqli_num_rows($row);
 
-$per_page = 5;
+$per_page = 3;
 $pages = ceil($rows_num / $per_page); // 7/5 = 2
 
+// $pages = 100;
 if (isset($_GET["page"])) {
     if ($_GET["page"] > $pages) {
         $page = 1;
@@ -18,8 +19,7 @@ if (isset($_GET["page"])) {
 } else {
     $page = 1;
 }
-echo $rows_num;
-echo $pages;
+
 $db->query = "";
 $paging = $db->table("products")->select(["*"])->pagination($page, $per_page)->execute();
 
@@ -35,6 +35,8 @@ while ($result = mysqli_fetch_assoc($paging)) {
     <meta charset="UTF-8">
     <title>Responsive E-Commerce product card ui design using HTML CSS</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
     <link rel="stylesheet" href="../css/products.css">
 </head>
 
@@ -58,13 +60,21 @@ while ($result = mysqli_fetch_assoc($paging)) {
             <?php endforeach; ?>
         </div>
         <div style="display: flex;justify-content:space-around;align-items:center;flex-direction:row;width:600px;margin:auto;background:#FFF;padding:10px;position:relative;top:-120px">
+
+            <?php if ($page > 1) : ?>
+                <a class="btn btn-success" href="home.php?page=<?php echo $page - 1; ?>">previous</a>
+            <?php endif; ?>
+
             <?php for ($i = 1; $i <= $pages; $i++) : ?>
-                <?php if ($i > 10) : ?>
-                    <p>pages more than 10</p>
-                <?php else :  ?>
-                    <a style="margin-left:20px;background:#9c27b0;padding:10px;color:#fff;" href="home.php?page=<?php echo $i; ?>"><?php echo $i; ?></a><?php endif; ?>
+                <a class="<?php echo $page < $i ?  "btn btn-primary" :  "btn btn-dark"; ?>" href="home.php?page=<?php echo $i; ?>"><?php echo $i; ?></a>
 
             <?php endfor; ?>
+
+
+            <?php if ($i  > $page) : ?>
+                <a class="btn btn-success" href="home.php?page=<?php echo $page + 1; ?>">next</a>
+            <?php endif; ?>
+
         </div>
 
     </div>
